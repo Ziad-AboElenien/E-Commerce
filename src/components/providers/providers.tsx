@@ -31,12 +31,12 @@ export default function Providers({ children, preloadedState }: providerProps) {
                         // Cart
                         const guestCart = getGuestCart();
                         if (guestCart && guestCart.length > 0) {
-                            guestCart.forEach(item => store.dispatch(addProductToCart(item)));
+                            guestCart.forEach((item: any) => store.dispatch(addProductToCart(item)));
                         }
                         // Wishlist
                         const guestWishlist = getGuestWishlist();
                         if (guestWishlist && guestWishlist.length > 0) {
-                            guestWishlist.forEach(item => store.dispatch(addProductToWishlist(item)));
+                            guestWishlist.forEach((item: any) => store.dispatch(addProductToWishlist(item)));
                         }
                     }
                 }
