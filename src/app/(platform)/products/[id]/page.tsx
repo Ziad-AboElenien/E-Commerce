@@ -1,14 +1,17 @@
 import ProductDetailsScreen from "@/src/features/products/screens/product-details.screen";
 
 type ProductDetailsPageProps ={
-    params: { id: string }
+    params: Promise<{id:string}>
 }
 
 export default async function ProductPage({params}:ProductDetailsPageProps) {
 
-  const { id } = params
+  const {id} = await params
 
   return <>
   <ProductDetailsScreen productId={id}/>
   </>
 }
+
+
+
