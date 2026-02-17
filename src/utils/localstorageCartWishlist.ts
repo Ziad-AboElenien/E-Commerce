@@ -8,7 +8,7 @@ export function getGuestCart() {
   }
 }
 
-export function setGuestCart(products) {
+export function setGuestCart(products: unknown) {
   localStorage.setItem('cart-guest', JSON.stringify(products));
 }
 
@@ -24,7 +24,7 @@ export function getGuestWishlist() {
   }
 }
 
-export function setGuestWishlist(products) {
+export function setGuestWishlist(products: unknown) {
   localStorage.setItem('wishlist-guest', JSON.stringify(products));
 }
 
