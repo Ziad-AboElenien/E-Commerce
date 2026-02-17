@@ -42,7 +42,7 @@ function WishlistScreen() {
     // Default values for missing states
     const isLoading = false;
     const error = undefined;
-    const refetch = () => {};
+    const refetch = () => { };
 
     // Check if product is in cart
     const isInCart = (productId: string) => {
@@ -121,10 +121,25 @@ function WishlistScreen() {
         try {
             const product = wishlistItems.find((item) => item._id === productId);
             if (!product) return;
-            // Guest: add to Redux/localStorage
-            const cartItem = { product, count: 1, price: product.priceAfterDiscount || product.price };
-            dispatch(addProductToCart(cartItem));
-            toast.success("Added to cart (guest)");
+            
+            // Transform wishlist product to cart product format
+            const cartProduct = {
+                ...product,
+                category: {
+                    ...product.category,
+                }
+            };
+            
+            const cartItem = {
+                _id: product._id,
+                product: cartProduct,
+                count: 1,
+                price: product.priceAfterDiscount || product.price
+            };
+
+            dispatch(addProductToCart(cartItem as any));
+
+            toast.success("Added to cart");
         } catch (error) {
             toast.error("Failed to add product to cart");
         }
