@@ -49,10 +49,15 @@ export default function SignupForm() {
                 toast.error(response.message);
             }
             if (response?.errors) {
-                Object.keys(response.errors).forEach((key) => {
-                    setError(key as keyof SignupSchemaType, { message: response.errors[key] })
-                })
+                const errors = response.errors;
+
+                Object.keys(errors).forEach((key) => {
+                    setError(key as keyof SignupSchemaType, {
+                        message: errors[key as keyof typeof errors],
+                    });
+                });
             }
+
         }
     }
 
@@ -78,195 +83,190 @@ export default function SignupForm() {
                         <p className="text-gray-600">Redirecting to sign in…</p>
                     </div>
                 ) : (
-                    <form 
-                        className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sm:p-8 space-y-6 transition-all duration-300 hover:shadow-2xl" 
+                    <form
+                        className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sm:p-8 space-y-6 transition-all duration-300 hover:shadow-2xl"
                         onSubmit={handleSubmit(onSubmit)}
                     >
-                    {/* Header */}
-                    <header className="text-center space-y-2">
-                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Create Account</h2>
-                        <p className="text-gray-500">Start your fresh journey with us today</p>
-                    </header>
+                        {/* Header */}
+                        <header className="text-center space-y-2">
+                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900">Create Account</h2>
+                            <p className="text-gray-500">Start your fresh journey with us today</p>
+                        </header>
 
-                    {/* Form Fields */}
-                    <div className="space-y-4">
-                        {/* Name */}
-                        <div>
-                            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">
-                                Full Name
-                            </label>
-                            <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
-                                </span>
-                                <input
-                                    type="text"
-                                    placeholder="John Doe"
-                                    id="name"
-                                    className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${
-                                        errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                                    }`}
-                                    {...register('name')} 
-                                />
+                        {/* Form Fields */}
+                        <div className="space-y-4">
+                            {/* Name */}
+                            <div>
+                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Full Name
+                                </label>
+                                <div className="relative">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <FontAwesomeIcon icon={faUser} className="h-4 w-4" />
+                                    </span>
+                                    <input
+                                        type="text"
+                                        placeholder="John Doe"
+                                        id="name"
+                                        className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${errors.name ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                                            }`}
+                                        {...register('name')}
+                                    />
+                                </div>
+                                {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
                             </div>
-                            {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>}
+
+                            {/* Email */}
+                            <div>
+                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Email Address
+                                </label>
+                                <div className="relative">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <FontAwesomeIcon icon={faEnvelope} className="h-4 w-4" />
+                                    </span>
+                                    <input
+                                        type="email"
+                                        placeholder="john@example.com"
+                                        id="email"
+                                        className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                                            }`}
+                                        {...register('email')}
+                                    />
+                                </div>
+                                {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
+                            </div>
+
+                            {/* Password */}
+                            <div>
+                                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Password
+                                </label>
+                                <div className="relative">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <FontAwesomeIcon icon={faLock} className="h-4 w-4" />
+                                    </span>
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        placeholder="Create a strong password"
+                                        id="password"
+                                        className={`w-full pl-11 pr-12 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${errors.password ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                                            }`}
+                                        {...register('password')}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    >
+                                        <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className="h-4 w-4" />
+                                    </button>
+                                </div>
+                                {errors.password ? (
+                                    <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
+                                ) : (
+                                    <p className="text-xs text-gray-400 mt-1">Must be at least 8 characters</p>
+                                )}
+                            </div>
+
+                            {/* Confirm Password */}
+                            <div>
+                                <label htmlFor="repassword" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Confirm Password
+                                </label>
+                                <div className="relative">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <FontAwesomeIcon icon={faLock} className="h-4 w-4" />
+                                    </span>
+                                    <input
+                                        type={showRePassword ? "text" : "password"}
+                                        placeholder="Confirm your password"
+                                        id="repassword"
+                                        className={`w-full pl-11 pr-12 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${errors.rePassword ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                                            }`}
+                                        {...register('rePassword')}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowRePassword(!showRePassword)}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    >
+                                        <FontAwesomeIcon icon={showRePassword ? faEyeSlash : faEye} className="h-4 w-4" />
+                                    </button>
+                                </div>
+                                {errors.rePassword && <p className="text-xs text-red-500 mt-1">{errors.rePassword.message}</p>}
+                            </div>
+
+                            {/* Phone */}
+                            <div>
+                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Phone Number
+                                </label>
+                                <div className="relative">
+                                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+                                        <FontAwesomeIcon icon={faPhone} className="h-4 w-4" />
+                                    </span>
+                                    <input
+                                        type="text"
+                                        placeholder="+20 123 456 7890"
+                                        id="phone"
+                                        className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                                            }`}
+                                        {...register('phone')}
+                                    />
+                                </div>
+                                {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>}
+                            </div>
+
+                            {/* Terms */}
+                            <div className="flex items-start gap-3">
+                                <input
+                                    id="terms"
+                                    type='checkbox'
+                                    className="mt-1 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                                    {...register('terms')}
+                                />
+                                <label htmlFor="terms" className="text-sm text-gray-600">
+                                    I agree to the{' '}
+                                    <Link href="/terms" className="text-emerald-600 hover:text-emerald-700 font-medium transition-all duration-300 hover:underline hover:underline-offset-2">
+                                        Terms of Service
+                                    </Link>
+                                    {' '}and{' '}
+                                    <Link href="/privacy-policy" className="text-emerald-600 hover:text-emerald-700 font-medium transition-all duration-300 hover:underline hover:underline-offset-2">
+                                        Privacy Policy
+                                    </Link>
+                                </label>
+                            </div>
+                            {errors.terms && <p className="text-xs text-red-500">{errors.terms.message}</p>}
                         </div>
 
-                        {/* Email */}
-                        <div>
-                            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">
-                                Email Address
-                            </label>
-                            <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <FontAwesomeIcon icon={faEnvelope} className="h-4 w-4" />
-                                </span>
-                                <input
-                                    type="email"
-                                    placeholder="john@example.com"
-                                    id="email"
-                                    className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${
-                                        errors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                                    }`}
-                                    {...register('email')} 
-                                />
-                            </div>
-                            {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>}
-                        </div>
-
-                        {/* Password */}
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
-                                Password
-                            </label>
-                            <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <FontAwesomeIcon icon={faLock} className="h-4 w-4" />
-                                </span>
-                                <input
-                                    type={showPassword ? "text" : "password"}
-                                    placeholder="Create a strong password"
-                                    id="password"
-                                    className={`w-full pl-11 pr-12 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${
-                                        errors.password ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                                    }`}
-                                    {...register('password')} 
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                                >
-                                    <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} className="h-4 w-4" />
-                                </button>
-                            </div>
-                            {errors.password ? (
-                                <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
+                        {/* Submit Button */}
+                        <button
+                            type="submit"
+                            disabled={isSubmitting}
+                            className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 hover:shadow-xl hover:shadow-emerald-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-lg shadow-emerald-500/25 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg group"
+                        >
+                            {isSubmitting ? (
+                                <>
+                                    <FontAwesomeIcon icon={faSpinner} className="h-5 w-5 animate-spin" />
+                                    <span>Creating Account...</span>
+                                </>
                             ) : (
-                                <p className="text-xs text-gray-400 mt-1">Must be at least 8 characters</p>
+                                <>
+                                    <FontAwesomeIcon icon={faUserPlus} className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
+                                    <span>Create Account</span>
+                                </>
                             )}
-                        </div>
+                        </button>
 
-                        {/* Confirm Password */}
-                        <div>
-                            <label htmlFor="repassword" className="block text-sm font-medium text-gray-700 mb-1.5">
-                                Confirm Password
-                            </label>
-                            <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <FontAwesomeIcon icon={faLock} className="h-4 w-4" />
-                                </span>
-                                <input
-                                    type={showRePassword ? "text" : "password"}
-                                    placeholder="Confirm your password"
-                                    id="repassword"
-                                    className={`w-full pl-11 pr-12 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${
-                                        errors.rePassword ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                                    }`}
-                                    {...register('rePassword')} 
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setShowRePassword(!showRePassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                                >
-                                    <FontAwesomeIcon icon={showRePassword ? faEyeSlash : faEye} className="h-4 w-4" />
-                                </button>
-                            </div>
-                            {errors.rePassword && <p className="text-xs text-red-500 mt-1">{errors.rePassword.message}</p>}
-                        </div>
-
-                        {/* Phone */}
-                        <div>
-                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">
-                                Phone Number
-                            </label>
-                            <div className="relative">
-                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <FontAwesomeIcon icon={faPhone} className="h-4 w-4" />
-                                </span>
-                                <input
-                                    type="text"
-                                    placeholder="+20 123 456 7890"
-                                    id="phone"
-                                    className={`w-full pl-11 pr-4 py-3 bg-gray-50 border rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all ${
-                                        errors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                                    }`}
-                                    {...register('phone')} 
-                                />
-                            </div>
-                            {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone.message}</p>}
-                        </div>
-
-                        {/* Terms */}
-                        <div className="flex items-start gap-3">
-                            <input 
-                                id="terms"
-                                type='checkbox'
-                                className="mt-1 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                                {...register('terms')} 
-                            />
-                            <label htmlFor="terms" className="text-sm text-gray-600">
-                                I agree to the{' '}
-                                <Link href="/terms" className="text-emerald-600 hover:text-emerald-700 font-medium transition-all duration-300 hover:underline hover:underline-offset-2">
-                                    Terms of Service
-                                </Link>
-                                {' '}and{' '}
-                                <Link href="/privacy-policy" className="text-emerald-600 hover:text-emerald-700 font-medium transition-all duration-300 hover:underline hover:underline-offset-2">
-                                    Privacy Policy
-                                </Link>
-                            </label>
-                        </div>
-                        {errors.terms && <p className="text-xs text-red-500">{errors.terms.message}</p>}
-                    </div>
-
-                    {/* Submit Button */}
-                    <button 
-                        type="submit" 
-                        disabled={isSubmitting}
-                        className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white rounded-xl font-medium hover:from-emerald-600 hover:to-emerald-700 hover:shadow-xl hover:shadow-emerald-500/30 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-lg shadow-emerald-500/25 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-lg group"
-                    >
-                        {isSubmitting ? (
-                            <>
-                                <FontAwesomeIcon icon={faSpinner} className="h-5 w-5 animate-spin" />
-                                <span>Creating Account...</span>
-                            </>
-                        ) : (
-                            <>
-                                <FontAwesomeIcon icon={faUserPlus} className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
-                                <span>Create Account</span>
-                            </>
-                        )}
-                    </button>
-
-                    {/* Footer */}
-                    <p className="text-center text-sm text-gray-500">
-                        Already have an account?{' '}
-                        <Link href="/login" className="text-emerald-600 hover:text-emerald-700 font-semibold transition-all duration-300 hover:underline hover:underline-offset-2">
-                            Sign in
-                        </Link>
-                    </p>
-                </form>
+                        {/* Footer */}
+                        <p className="text-center text-sm text-gray-500">
+                            Already have an account?{' '}
+                            <Link href="/login" className="text-emerald-600 hover:text-emerald-700 font-semibold transition-all duration-300 hover:underline hover:underline-offset-2">
+                                Sign in
+                            </Link>
+                        </p>
+                    </form>
                 )}
             </div>
         </div>
