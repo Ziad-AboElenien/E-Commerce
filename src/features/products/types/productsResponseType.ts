@@ -32,7 +32,6 @@ export interface Product {
   price: number;,
   priceAfterDiscount: number;
   imageCover: string;
-  slug: string;
   category: Category;
   brand: Brand;
   ratingsAverage: number;
