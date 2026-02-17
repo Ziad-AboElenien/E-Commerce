@@ -101,9 +101,19 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
       } else {
         // Guest: save to localStorage and slice
         const guestCart = getGuestCart();
-        const exists = guestCart.some(item => item.product._id === _id);
+        const exists = guestCart.some((item: any) => item.product._id === _id);
         if (!exists) {
-          const cartItem = { product: productInfo, count: 1, price: priceAfterDiscount || price };
+          const cartItem = { 
+            _id, 
+            product: {
+              ...productInfo,
+              id: _id,
+              quantity: 1,
+              subcategory: productInfo.category.name
+            }, 
+            count: 1, 
+            price: priceAfterDiscount || price 
+          };
           guestCart.push(cartItem);
           setGuestCart(guestCart);
           dispatch(addProductToCart(cartItem));

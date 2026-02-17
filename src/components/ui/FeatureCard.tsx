@@ -6,6 +6,7 @@ type Props = {
   children?: React.ReactNode
 }
 
+export const FeatureCard: React.FC<Props> = ({ title, description, children }) => {
   return (
     <div className="group relative bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl transform transition-all duration-300 hover:-translate-y-2">
       <div className="flex items-start gap-4">

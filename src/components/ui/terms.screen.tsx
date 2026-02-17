@@ -4,9 +4,6 @@ import PolicyCard from "./PolicyCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faTruck,
-  faRotate,
-  faShieldHalved,
-  faHeadset,
   faFileLines,
   faExclamationTriangle,
   faCheck,

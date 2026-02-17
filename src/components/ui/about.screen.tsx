@@ -1,6 +1,5 @@
-import React from "react";
 import Link from "next/link";
-import FeatureCard from "./FeatureCard";
+import { FeatureCard } from "./FeatureCard";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLeaf, faBolt, faShieldHalved } from "@fortawesome/free-solid-svg-icons";
 
