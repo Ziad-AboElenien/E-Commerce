@@ -41,7 +41,8 @@ function WishlistScreen() {
 
     // Default values for missing states
     const isLoading = false;
-    const error = undefined;
+    const [error, setError] = useState<unknown>(null);
+
     const refetch = () => { };
 
     // Check if product is in cart
@@ -121,7 +122,7 @@ function WishlistScreen() {
         try {
             const product = wishlistItems.find((item) => item._id === productId);
             if (!product) return;
-            
+
             // Transform wishlist product to cart product format
             const cartProduct = {
                 ...product,
@@ -129,7 +130,7 @@ function WishlistScreen() {
                     ...product.category,
                 }
             };
-            
+
             const cartItem = {
                 _id: product._id,
                 product: cartProduct,
@@ -174,7 +175,12 @@ function WishlistScreen() {
                     <h2 className="text-2xl font-bold text-gray-900 mb-3">
                         Oops! Something went wrong
                     </h2>
-                    <p className="text-gray-500 mb-6">{error instanceof Error ? error.message : String(error)}</p>
+                    {error && (
+                        <p className="text-gray-500 mb-6">
+                            {error instanceof Error ? error.message : String(error)}
+                        </p>
+                    )}
+
                     <button
                         onClick={() => refetch && refetch()}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors"
