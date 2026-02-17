@@ -48,11 +48,11 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
   const dispatch = useAppDispatch();
   const { wishlistProducts } = useAppSelector(state => state.wishlist);
   const isAuth = useAppSelector(state => state.auth.isAuthinticated);
-  
+
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [isAddedToCart, setIsAddedToCart] = useState(false);
   const [isWishlistLoading, setIsWishlistLoading] = useState(false);
-  
+
   const {
     _id,
     title,
@@ -103,20 +103,21 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
         const guestCart = getGuestCart();
         const exists = guestCart.some((item: any) => item.product._id === _id);
         if (!exists) {
-          const cartItem = { 
-            _id, 
+          const cartItem = {
+            _id,
             product: {
               ...productInfo,
               id: _id,
               quantity: 1,
-              subcategory: productInfo.category.name
-            }, 
-            count: 1, 
-            price: priceAfterDiscount || price 
+              subcategory: [productInfo.category.name] 
+            },
+            count: 1,
+            price: priceAfterDiscount || price
           };
+
           guestCart.push(cartItem);
           setGuestCart(guestCart);
-          dispatch(addProductToCart(cartItem));
+          dispatch(addProductToCart(cartItem as any));
           setIsAddedToCart(true);
           setTimeout(() => setIsAddedToCart(false), 2000);
           toast.success('Added to cart (guest)');
@@ -149,10 +150,10 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
       } else {
         // Guest: save to localStorage and slice
         const guestWishlist = getGuestWishlist();
-        const exists = guestWishlist.some(item => item._id === _id);
+        const exists = guestWishlist.some((item: ProductInfo) => item._id === _id);
         if (isInWishlist || exists) {
           // Remove from guest wishlist
-          const updated = guestWishlist.filter(item => item._id !== _id);
+          const updated = guestWishlist.filter((item: ProductInfo) => item._id !== _id);
           setGuestWishlist(updated);
           dispatch(removeProductFromWishlist(_id));
           toast.success('Removed from wishlist');
@@ -190,11 +191,10 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
             <button
               onClick={handleToggleWishlist}
               disabled={isWishlistLoading}
-              className={`absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-md flex items-center justify-center transition-all duration-200 z-10 disabled:opacity-50 ${
-                isInWishlist 
-                  ? 'text-rose-500 hover:bg-rose-50' 
+              className={`absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-md flex items-center justify-center transition-all duration-200 z-10 disabled:opacity-50 ${isInWishlist
+                  ? 'text-rose-500 hover:bg-rose-50'
                   : 'text-gray-400 hover:text-rose-500 hover:bg-rose-50'
-              }`}
+                }`}
               aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
             >
               {isWishlistLoading ? (
@@ -297,7 +297,7 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
                   </span>
                 )}
               </div>
-              
+
               <div className="flex items-center gap-2">
                 {/* Quick View Button */}
                 <Link
@@ -310,11 +310,10 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
 
                 {/* Add to Cart Button */}
                 <button
-                  className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-70 ${
-                    isAddedToCart 
-                      ? 'bg-emerald-500 hover:bg-emerald-600' 
+                  className={`flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl text-white text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-70 ${isAddedToCart
+                      ? 'bg-emerald-500 hover:bg-emerald-600'
                       : 'bg-linear-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700'
-                  }`}
+                    }`}
                   aria-label="Add to cart"
                   onClick={handleAddToCart}
                   disabled={isAddingToCart}
@@ -360,11 +359,10 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
         <button
           onClick={handleToggleWishlist}
           disabled={isWishlistLoading}
-          className={`absolute top-2 sm:top-3 right-2 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-md flex items-center justify-center transition-all duration-200 z-10 disabled:opacity-50 ${
-            isInWishlist 
-              ? 'text-rose-500 hover:bg-rose-50' 
+          className={`absolute top-2 sm:top-3 right-2 sm:right-3 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/90 backdrop-blur-sm shadow-md flex items-center justify-center transition-all duration-200 z-10 disabled:opacity-50 ${isInWishlist
+              ? 'text-rose-500 hover:bg-rose-50'
               : 'text-gray-400 hover:text-rose-500 hover:bg-rose-50'
-          }`}
+            }`}
           aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
         >
           {isWishlistLoading ? (
@@ -459,13 +457,12 @@ export default function ProductCard({ productInfo, viewMode = 'grid' }: ProductC
               </span>
             )}
           </div>
-          
+
           <button
-            className={`flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-white text-xs sm:text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-70 ${
-              isAddedToCart 
-                ? 'bg-emerald-500 hover:bg-emerald-600' 
+            className={`flex items-center justify-center gap-1.5 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-white text-xs sm:text-sm font-medium transition-all duration-200 shadow-md hover:shadow-lg disabled:opacity-70 ${isAddedToCart
+                ? 'bg-emerald-500 hover:bg-emerald-600'
                 : 'bg-linear-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700'
-            }`}
+              }`}
             aria-label="Add to cart"
             onClick={handleAddToCart}
             disabled={isAddingToCart}
